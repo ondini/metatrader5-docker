@@ -154,13 +154,6 @@ def get_order_from_ticket_endpoint():
             'format': 'date-time',
             'description': 'End date in ISO format.'
         },
-        {
-            'name': 'position',
-            'in': 'query',
-            'type': 'integer',
-            'required': True,
-            'description': 'Position number to filter deals.'
-        }
     ],
     'responses': {
         200: {
@@ -195,16 +188,16 @@ def history_deals_get_endpoint():
         to_date = request.args.get('to_date')
         position = request.args.get('position')
         
-        if not all([from_date, to_date, position]):
-            return jsonify({"error": "from_date, to_date, and position parameters are required"}), 400
+        if not all([from_date, to_date]) and not position:
+            return jsonify({"error": "from_date and to_date, or position parameters are required"}), 400
         
         from_date = datetime.fromisoformat(from_date.replace('Z', '+00:00'))
         to_date = datetime.fromisoformat(to_date.replace('Z', '+00:00'))
-        position = int(position)
+        # position = int(position)
 
         from_timestamp = int(from_date.timestamp())
         to_timestamp = int(to_date.timestamp())
-        deals = mt5.history_deals_get(from_timestamp, to_timestamp, position=position)
+        deals = mt5.history_deals_get(from_timestamp, to_timestamp)
         
         if deals is None:
             return jsonify({"error": "Failed to get deals history"}), 404
