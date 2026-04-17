@@ -1,5 +1,7 @@
 services:
-  mt5:
+  mt5:    
+    build:
+      dockerfile: Dockerfile
     image: mt5_v2
     container_name: mt5_v2
     volumes:

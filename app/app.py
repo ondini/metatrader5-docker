@@ -39,7 +39,6 @@ app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
 
 if __name__ == '__main__':
     if not mt5.initialize():
-        logger.error("Failed to initialize MT5.")
+        logger.error("Failed to initialize MT5., error code: ", mt5.last_error())
     poret = os.environ.get('MT5_API_PORT')
-    print(poret)
     app.run(host='0.0.0.0', port=int(poret))
